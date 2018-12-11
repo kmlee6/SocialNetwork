@@ -3,6 +3,9 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ThrowStmt } from '@angular/compiler';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { HomeRouting } from './home.module';
 
 @Component({
   selector: 'app-home',
@@ -11,18 +14,37 @@ import { ThrowStmt } from '@angular/compiler';
 })
 export class HomeComponent implements OnInit {
 
-	constructor() { }
+	constructor(private route: ActivatedRoute, private router: Router) { }
 
-	ngOnInit() {
-	}
-
-	loginFlag: boolean = false;
+	path: any;
+	sub: any;
 
 	first: boolean = true;
 	show_e: boolean = false;
 	search_e: boolean = false;
 	show_f: boolean = false;
 	show_e_d: boolean = false;
+
+	ngOnInit() {
+		this.sub = this.route.params.subscribe(params => {
+			this.path = params; // (+) converts string 'id' to a number
+			console.log(this.path);
+			switch(this.path['view']){
+				case '1':
+					this.showEventsList();
+				break;
+				case '2':
+					this.searchEvents();
+				break;
+				case '3':
+					this.showFavourite();
+				break;
+			}
+			// In a real app: dispatch action to load the details here.
+		});
+	}
+
+	loginFlag: boolean = false;
 
 	username:string = '';
 
@@ -34,6 +56,7 @@ export class HomeComponent implements OnInit {
 		let loginOk: boolean = true;
 		console.log(username + password);
 		if(loginOk){
+			// set login ok to cookie
 			this.loginFlag = true;
 			this.username = username;
 			this.first = false;
@@ -54,6 +77,7 @@ export class HomeComponent implements OnInit {
 
 	showEventsList(){
 		if(this.loginFlag){
+			this.router.navigate(['home/1']);
 			console.log('show events');
 			this.first = false;
 			this.show_e = true;
@@ -62,11 +86,13 @@ export class HomeComponent implements OnInit {
 			this.show_e_d = false;
 		}else{
 			window.alert('Please Login!');
+			this.router.navigate(['home/0']);
 		}
 	}
 
 	searchEvents(){
 		if(this.loginFlag){
+			this.router.navigate(['home/2']);
 			console.log('search events');
 			this.first = false;
 			this.show_e = false;
@@ -75,11 +101,13 @@ export class HomeComponent implements OnInit {
 			this.show_e_d = false;
 		}else{
 			window.alert('Please Login!');
+			this.router.navigate(['home/0']);
 		}
 	}
 
 	showFavourite(){
 		if(this.loginFlag){
+			this.router.navigate(['home/3']);
 			console.log('show favourite');
 			this.first = false;
 			this.show_e = false;
@@ -88,6 +116,7 @@ export class HomeComponent implements OnInit {
 			this.show_e_d = false;
 		}else{
 			window.alert('Please Login!');
+			this.router.navigate(['home/0']);
 		}
 	}
 

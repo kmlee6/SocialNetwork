@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { AdminRouting } from './admin.module';
 
 @Component({
 	selector: 'app-admin',
@@ -7,9 +10,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-	constructor() {}
+	constructor(private route: ActivatedRoute, private router: Router) {}
+
+	path: any;
+	sub: any;
 
 	ngOnInit() {
+		this.sub = this.route.params.subscribe(params => {
+			this.path = params; // (+) converts string 'id' to a number
+			console.log(this.path);
+			switch(this.path['view']){
+				case '1':
+					this.showFlushDataView();
+				break;
+				case '2':
+					this.showManageEventsView();
+				break;
+				case '3':
+					this.showManageUsersView();
+				break;
+				case '4':
+					this.showObtainEventsView();
+				break;
+			}
+			// In a real app: dispatch action to load the details here.
+		});
 	}
 
 	loginFlag: boolean = true;
@@ -25,6 +50,7 @@ export class AdminComponent implements OnInit {
 
 	showFlushDataView(){
 		console.log('show flush data view');
+		this.router.navigate(['admin/1']);
 		this.first = false;
 		this.show_f_d_v = true;
 		this.show_m_e_v = false;
@@ -34,6 +60,7 @@ export class AdminComponent implements OnInit {
 
 	showManageEventsView(){
 		console.log('show manage events view');
+		this.router.navigate(['admin/2']);
 		this.first = false;
 		this.show_f_d_v = false;
 		this.show_m_e_v = true;
@@ -43,6 +70,7 @@ export class AdminComponent implements OnInit {
 
 	showManageUsersView(){
 		console.log('show manage users view');
+		this.router.navigate(['admin/3']);
 		this.first = false;
 		this.show_f_d_v = false;
 		this.show_m_e_v = false;
@@ -52,6 +80,7 @@ export class AdminComponent implements OnInit {
 
 	showObtainEventsView(){
 		console.log('show obtain events view');
+		this.router.navigate(['admin/4']);
 		this.first = false;
 		this.show_f_d_v = false;
 		this.show_m_e_v = false;
