@@ -1,0 +1,20 @@
+<nav class="navbar flex-column navbar-dark bg-dark text-white sticky-top">
+	<ul class="nav nav-pills nav-fill">
+		<li class="nav-item">
+			<img width="40" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+		</li>
+		<li class="nav-item" (click)="showEventsList()" (mouseover)="hover0=true" (mouseleave)="hover0=false">
+			<div class="nav-link" [style.color]="hover0?'yellow':'white'">List All Events</div>
+		</li>
+		<li class="nav-item" (click)="searchEvents()" (mouseover)="hover1=true" (mouseleave)="hover1=false">
+			<div class="nav-link" [style.color]="hover1?'yellow':'white'">Search Events</div>
+		</li>
+		<li class="nav-item" (click)="showFavourite()" (mouseover)="hover2=true" (mouseleave)="hover2=false">
+			<div class="nav-link" [style.color]="hover2?'yellow':'white'">Favourite Events</div>
+		</li>
+		<li class="nav-item" (click)="logout()" (mouseover)="hover3=true" (mouseleave)="hover3=false">
+			<div class="nav-link" [style.color]="hover3?'yellow':'white'">Logout</div>
+		</li>
+		<li class="nav-item bg-light"><div class="nav-link font-weight-bold" style="color: rgb(75, 207, 58) ">{{ username }}</div></li>
+	</ul>
+</nav>
