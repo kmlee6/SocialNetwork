@@ -58,6 +58,10 @@ var CommentSchema = mongoose.Schema({
 		type: Number,
 		required: true
 	},
+	username: {
+		type: String,
+		required: true
+	},
 	eid: {
 		type: Number,
 		required: true

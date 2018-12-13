@@ -16,6 +16,7 @@ router.post('/saveComment', function(req, res){
 									cid: maxIndex,
 									eid: req.body["eid"],
 									uid: req.body["uid"],
+									username: req.body["username"]
 									time: new Date(),
 									comment: req.body["comment"]
 								})
