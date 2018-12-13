@@ -46,7 +46,7 @@ router.get('/flushData', function(req, res){
 })
 
 router.post('/addEvent', function(req, res){
-	Event.find({}, 'eid -_id -__v').sort({eid : -1}).limit(1)
+	Event.find({}, 'eid -_id').sort({eid : -1}).limit(1)
 		.then(function(latestID){
 			console.log(req.body)
 			maxIndex = 0
@@ -64,6 +64,12 @@ router.post('/addEvent', function(req, res){
 			instance.save().then(function(){
 				res.send("done!")
 			})
+	})
+})
+
+router.post('/addEventList', function(req, res){
+	Event.insertMany(req.body).then(function(){
+		res.send("done!")
 	})
 })
 
