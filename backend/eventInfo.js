@@ -68,9 +68,30 @@ router.post('/addEvent', function(req, res){
 })
 
 router.post('/addEventList', function(req, res){
-	console.log(req.body['eventList'])
-	Event.insertMany(JSON.parse(req.body['eventList'])).then(function(){
-		res.send("done!")
+	eventList_str = req.body['eventList']
+	// eventList_str = "[{\"name\": \"haha\", \"type\": \"haha\", \"datetime\": \"haha\", \"location\": \"haha\", \"quota\": \"1\"},{\"name\": \"haha\", \"type\": \"haha\", \"datetime\": \"haha\", \"location\": \"haha\", \"quota\": \"1\"}]"
+	eventList = JSON.parse(eventList_str)
+	Event.find({}, 'eid -_id').sort({eid : -1}).limit(1)
+		.then(function(latestID){
+			maxIndex = 0
+			if (latestID.length != 0){
+				maxIndex = latestID[0].eid + 1
+			}
+			newEvents = []
+			for(var index in eventList){
+				var instance = eventList[index]
+				var nextRecord = {}
+				nextRecord["eid"] = maxIndex + index
+				nextRecord["name"] = instance["name"]
+				nextRecord["type"] = instance["type"]
+				nextRecord["datetime"] = instance["datetime"]
+				nextRecord["location"] = instance["location"]
+				nextRecord["quota"] = instance["quota"]
+				newEvents.push(nextRecord)
+			}
+			Event.insertMany(newEvents).then(function(){
+				res.send("done")
+			})
 	})
 })
 
