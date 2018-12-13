@@ -7,6 +7,13 @@ const Event = mongoose.model('Event', schema.EventSchema)
 const Account = mongoose.model('Account', schema.AccountSchema)
 const Comment = mongoose.model('Comment', schema.CommentSchema)
 
+router.get('/getAllUser', function(req, res){
+	Account.find({}, '-_id')
+		.then(function(data, err){
+			res.json(data)
+		})
+})
+
 router.post('/addUser', function(req, res){
 	Account.find({}, 'uid -_id').sort({uid : -1}).limit(1)
 		.then(function(latestID){

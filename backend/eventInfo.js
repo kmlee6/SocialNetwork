@@ -68,7 +68,6 @@ router.post('/addEvent', function(req, res){
 })
 
 router.get('/getAllEvent', function(req, res){
-	console.log("haha")
 	Event.find({}, '-_id -__v').then(function(data, err){
 		res.json(data)
 	})
