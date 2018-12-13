@@ -78,4 +78,15 @@ router.get('/removeUser/:uid', function(req, res){
 		})
 })
 
+router.post('/login', function(req, res){
+	Account.findOne({name: req.body['name'], password: req.body['password']}, '').then(function(data, err){
+		found = data != null
+		var userID = null
+		if(found){
+			userID = data['uid']
+		}
+		res.json({login: found, uid: userID})
+	})
+})
+
 module.exports.router = router
