@@ -26,8 +26,10 @@ router.post('/addUser', function(req, res){
 									name: req.body['name'],
 									password: req.body['password']
 								})
-			instance.save().then(function(){
+			instance.save().then(function(err, data){
 				res.send("done!")
+			}).catch(function(err){
+				res.send("88")
 			})
 	})
 })

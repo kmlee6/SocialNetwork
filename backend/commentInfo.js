@@ -16,7 +16,7 @@ router.post('/saveComment', function(req, res){
 									cid: maxIndex,
 									eid: req.body["eid"],
 									uid: req.body["uid"],
-									username: req.body["username"]
+									username: req.body["username"],
 									time: new Date(),
 									comment: req.body["comment"]
 								})
@@ -27,7 +27,7 @@ router.post('/saveComment', function(req, res){
 })
 
 router.get('/getComment/:eid', function(req, res){
-	Comment.find({eid: req.params.eid}, '-_id -__v').sort('-time').exec(function(err, data){
+	Comment.find({eid: req.params.eid}, '-_id -__v').sort('time').exec(function(err, data){
 		res.json(data)
 	})
 })
