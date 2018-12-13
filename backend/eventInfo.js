@@ -57,7 +57,7 @@ router.post('/addEvent', function(req, res){
 									eid: maxIndex,
 									name: req.body['name'],
 									type: req.body['type'],
-									datetime: req.Ebody['datetime'],
+									datetime: req.body['datetime'],
 									location: req.body['location'],
 									quota: req.body['quota']
 								})
@@ -68,7 +68,8 @@ router.post('/addEvent', function(req, res){
 })
 
 router.post('/addEventList', function(req, res){
-	Event.insertMany(req.body).then(function(){
+	console.log(req.body['eventList'])
+	Event.insertMany(JSON.parse(req.body['eventList'])).then(function(){
 		res.send("done!")
 	})
 })

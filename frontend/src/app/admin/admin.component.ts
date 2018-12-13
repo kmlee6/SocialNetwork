@@ -64,6 +64,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	showManageEventsView(){
+		this.eventsList = [];
 		console.log('show manage events view');
 		this.router.navigate(['admin/2']);
 		this.first = false;
@@ -90,6 +91,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	showManageUsersView(){
+		this.usersList = [];
 		console.log('show manage users view');
 		this.router.navigate(['admin/3']);
 		this.first = false;
@@ -103,13 +105,9 @@ export class AdminComponent implements OnInit {
 			//add all data to local list
 			for(let i = 0; i < data.length; i++){
 				let newE: any = {};
-				newE.eid = data[i].eid;
+				newE.uid = data[i].uid;
 				newE.name = data[i].name;
-				newE.datetime = data[i].datetime;
-				newE.quota = data[i].quota;
-				newE.location = data[i].location;
-				newE.type = data[i].type;
-				this.eventsList.push(newE);
+				this.usersList.push(newE);
 			}
 		});
 	}
@@ -132,7 +130,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	pushEvent(event: any){
-		console.log('add event', event);
+		console.log('_add event', event);
 		let newE: any = {};
 		newE.name = event.target.parentElement.parentElement.children[0].children[0].value;
 		newE.datetime = event.target.parentElement.parentElement.children[1].children[0].value;
@@ -146,7 +144,7 @@ export class AdminComponent implements OnInit {
 			quota: newE.quota,
 			location: newE.location,
 			type: newE.type
-		}, (data, status) => console.log(data));
+		}, (data, status) => this.eventsList.push(newE));
 	}
 
 	pushEventFromScript(name: string, datetime: string, quota: string, location: string, type: string){
@@ -205,7 +203,7 @@ export class AdminComponent implements OnInit {
 		this.usersList[i].name = event.target.parentElement.parentElement.children[0].children[0].children[0].value;
 		this.usersList[i].password = sha256(event.target.parentElement.parentElement.children[1].children[0].children[0].value);
 
-		$.post('http://localhost:3000/editUser', {
+		$.post('http://localhost:3000/editUser/' + this.usersList[i].uid, {
 			name: this.usersList[i].name,
 			password: this.usersList[i].password
 		}, (data, status) => console.log(data));
@@ -213,7 +211,7 @@ export class AdminComponent implements OnInit {
 
 	deleteUser(i: any){
 		console.log('delete user', i);
-		this.usersList.splice(i, 1);
+		$.get('http://localhost:3000/removeUser/' + this.usersList[i].uid, (data, status) => this.usersList.splice(i, 1));
 	}
 
 	onFileLoad(event: any){
@@ -221,11 +219,23 @@ export class AdminComponent implements OnInit {
 		let lines = result.split(/\r|\n|\r/);
 		console.log('loaded result=', lines);
 		console.log(lines.length);
+		let newEventList: Array<any> = [];
 		for(let i = 0; i < lines.length; i++){
 			let data: Array<string> = lines[i].split(',');
 			console.log(data);
-			this.pushEventFromScript(data[0], data[1], data[2], data[3], data[4]);
+			// this.pushEventFromScript(data[0], data[1], data[2], data[3], data[4]);
+			let newE: any = {};
+			newE.name = data[0];
+			newE.datetime = data[1];
+			newE.quota = data[2];
+			newE.location = data[3];
+			newE.type = data[4];
+			newEventList.push(newE);
 		}
+		console.log(JSON.stringify(newEventList));
+		$.post('http://localhost:3000/addEventList',{ 
+			eventList: JSON.stringify(newEventList)
+	}, (data, status) => console.log(data));
 	}
 
 	// learnt from stackoverflow
