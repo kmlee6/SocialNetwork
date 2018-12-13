@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AdminRouting } from './admin.module';
+import * as $ from 'jquery';
 
 @Component({
 	selector: 'app-admin',
@@ -90,6 +91,9 @@ export class AdminComponent implements OnInit {
 
 	reloadData(){
 		console.log('reload data from online dataset');
+
+		//send get request
+		$.get('localhost:3000/flushData', (data, status) => console.log(status));
 	}
 
 	eventsList:Array<any> = [];
