@@ -25,6 +25,9 @@ export class HomeComponent implements OnInit {
 	eventsList: Array<any> = [];
 	favouriteEventsList: Array<any> = [];
 
+	username:string = '';
+	userid:string = '';
+
 	first: boolean = true;
 	show_e: boolean = false;
 	search_e: boolean = false;
@@ -32,6 +35,8 @@ export class HomeComponent implements OnInit {
 	show_e_d: boolean = false;
 
 	ngOnInit() {
+		this.userid = this.cookieService.get('login');
+		this.username = this.cookieService.get('loginname');
 		this.sub = this.route.params.subscribe(params => {
 			this.path = params; // (+) converts string 'id' to a number
 			console.log(this.path);
@@ -52,27 +57,34 @@ export class HomeComponent implements OnInit {
 
 	loginFlag: boolean = false;
 
-	username:string = '';
-	userid:string = '';
-
-	searchField: string = 'Program Name';
+	searchField: string = 'name';
 
 	keyword: string = '';
 
-	login(username: string, password: string){
-		let loginOk: boolean = true;
-		console.log(username + password);
+	login(username: string, userpassword: string){
+		let loginOk: boolean = false;
 
 		//check login
-
-		if(loginOk){
-			// set login ok to cookie
-			this.cookieService.set('login', 'yes');
-			this.username = username;
-			this.first = false;
-			this.show_e = true;
-			this.router.navigate(['home/1']);
-		}
+		$.post('http://localhost:3000/login', {
+			name: username,
+			password: sha256(userpassword)
+		}, (data, status) => {
+			console.log(data);
+			if(data.login == true){
+				this.userid = data.uid;
+				loginOk = true;
+				// set login ok to cookie
+				this.cookieService.set('login', data.uid);
+				this.cookieService.set('loginname', username);
+				this.username = username;
+				this.first = false;
+				this.show_e = true;
+				this.loginFlag = true;
+				this.router.navigate(['home/1']);
+			}else{
+				alert('login failed');
+			}
+		})
 	}
 
 	logout(){
@@ -89,7 +101,7 @@ export class HomeComponent implements OnInit {
 
 	showEventsList(){
 		console.log(this.cookieService.get('login'));
-		if(this.cookieService.get('login') == 'yes'){
+		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
 		}
 		if(this.loginFlag){
@@ -122,7 +134,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	searchEvents(){
-		if(this.cookieService.get('login') == 'yes'){
+		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
 		}
 		if(this.loginFlag){
@@ -140,7 +152,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	showFavourite(){
-		if(this.cookieService.get('login') == 'yes'){
+		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
 		}
 		if(this.loginFlag){
@@ -259,14 +271,23 @@ export class HomeComponent implements OnInit {
 	resultEventsList: Array<any> = [];
 
 	search(){
-		console.log('search');
-		let newE: any = {}
-		newE.name = 'E3';
-		newE.datetime = '2018';
-		newE.quota = 'CSE';
-		newE.location = '924';
-		newE.type = 'fun';
-		this.resultEventsList.push(newE);
+		console.log(this.searchField, this.keyword);
+		this.resultEventsList = [];
+		$.get('http://localhost:3000/getEvent/' + this.searchField + '/' + this.keyword,  (data, status) => {
+			{
+				console.log(data);
+				for(let i = 0; i < data.length; i++){
+					let newE: any = {};
+					newE.eid = data[i].eid;
+					newE.name = data[i].name;
+					newE.datetime = data[i].datetime;
+					newE.quota = data[i].quota;
+					newE.location = data[i].location;
+					newE.type = data[i].type;
+					this.resultEventsList.push(newE);
+				}
+			}
+		});
 	}
 
 	focusedEvent: any = {};
@@ -279,15 +300,24 @@ export class HomeComponent implements OnInit {
 		this.show_f = false;
 		this.show_e_d = true;
 		this.focusedEvent = event;
+
+		//send post comment request
+		$.get('http://localhost:3000/getComment/' + this.focusedEvent.eid, (data, status) => {
+			console.log(data);
+			//list comment
+		});
 	}
 
 
 
 	pushComment(content: string){
-		let comment: any = {};
-		comment.username = this.username;
-		comment.datetime = '2015';
-		comment.content = content;
-		this.focusedEventComments.push(comment);
+		console.log(this.userid);
+		$.post('http://localhost:3000/saveComment', {
+			eid: this.focusedEvent.eid,
+			uid: this.userid,
+			comment: content
+		}, (data, status) => {
+			console.log(data);
+		});
 	}
 }
