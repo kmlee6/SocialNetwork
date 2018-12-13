@@ -23,11 +23,16 @@ router.get('/flushData', function(req, res){
 			count += 1
 			var instance = data[key]
 			var nextRecord = {}
+			var startDate = instance["PGM_START_DATE"].split(" ")[0].split("-")
+			var endDate = instance["PGM_END_DATE"].split(" ")[0].split("-")
+			console.log(startDate)
+			console.log(endDate)
+			var startTime = instance["PGM_START_TIME"]
+			var endTime = instance["PGM_END_TIME"]
 			nextRecord["eid"] = instance["PGM_CODE"]
 			nextRecord["name"] = instance["EN_PGM_NAME"]
 			nextRecord["type"] = instance["EN_ACT_TYPE_NAME"]
-			nextRecord["date"] = instance["EN_DAY"]
-			nextRecord["time"] = instance["PGM_START_TIME"]+" - "+instance["PGM_END_TIME"]
+			nextRecord["datetime"] = startDate[2]+"/"+startDate[1]+"-"+endDate[2]+"/"+endDate[1]+", "+startTime+"-"+endTime
 			nextRecord["location"] = instance["EN_VENUE"]
 			nextRecord["quota"] = instance["QUOTA"]
 			newEvent.push(nextRecord)
