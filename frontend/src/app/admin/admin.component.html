@@ -35,6 +35,7 @@
 	<table class="table table-striped table-bordered table-dark table-responsive-sm">
 		<thead>
 			<tr>
+				<th>ID</th>
 				<th>Program Name</th>
 				<th>Datetime</th>
 				<th>quota</th>
@@ -45,6 +46,9 @@
 		</thead>
 		<tbody>
 				<tr *ngFor="let event of eventsList; let i = index">
+					<td>
+						{{event.eid}}
+					</td>
 					<td (mouseover)='hoverIndex=i' (mouseleave)='hoverIndex=-1'>
 						{{event.name}}
 						<div class='dropdown' [style.display]='hoverIndex==i?"block":"none"'>
@@ -157,7 +161,7 @@
 							</tr>
 							<tr>
 								<td>
-									<input value='{{user.password}}'>
+									<input value='*********'>
 								</td>
 							</tr>
 							
@@ -170,7 +174,8 @@
 					</div>
 				</td>
 				<td>
-					{{user.password}}
+					<!-- {{user.password}} -->
+					*********
 				</td>
 				<td>
 					<button class="btn btn-sm" (click)='deleteUser(i)'>X</button>

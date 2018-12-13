@@ -142,6 +142,7 @@ export class HomeComponent implements OnInit {
 		this.eventsList.push(newE1);
 	}
 
+	eidClickCount = 0;
 	nameClickCount = 0;
 	datetimeClickCount = 0;
 	quotaClickCount = 0;
@@ -150,6 +151,16 @@ export class HomeComponent implements OnInit {
 	sortEvents(item: string){
 		console.log('sort start');
 		switch(item){
+			case 'eid':
+				console.log('sort by eid');
+				if(this.eidClickCount % 2 == 0){
+					this.eventsList.sort((a,b) => (a.eid > b.eid) ? 1 : ((b.eid > a.eid) ? -1 : 0));
+				}else{
+					this.eventsList.sort((a,b) => (a.eid > b.eid) ? -1 : ((b.eid > a.eid) ? 1 : 0));
+				}
+				this.eidClickCount++;
+			break;
+
 			case 'name':
 				console.log('sort by name');
 				if(this.nameClickCount % 2 == 0){

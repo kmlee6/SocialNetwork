@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AdminRouting } from './admin.module';
 import * as $ from 'jquery';
+import sha256 from 'js-sha256';
 
 @Component({
 	selector: 'app-admin',
@@ -15,6 +16,9 @@ export class AdminComponent implements OnInit {
 
 	path: any;
 	sub: any;
+
+	eventsList:Array<any> = [];
+	usersList: Array<any> = [];
 
 	ngOnInit() {
 		this.sub = this.route.params.subscribe(params => {
@@ -67,6 +71,22 @@ export class AdminComponent implements OnInit {
 		this.show_m_e_v = true;
 		this.show_m_u_v = false;
 		this.show_o_e_v = false;
+
+		//send post request to get all events
+		$.get('http://localhost:3000/getAllEvent', (data, status) => {
+			console.log(status, data);
+			//add all data to local list
+			for(let i = 0; i < data.length; i++){
+				let newE: any = {};
+				newE.eid = data[i].eid;
+				newE.name = data[i].name;
+				newE.datetime = data[i].datetime;
+				newE.quota = data[i].quota;
+				newE.location = data[i].location;
+				newE.type = data[i].type;
+				this.eventsList.push(newE);
+			}
+		});
 	}
 
 	showManageUsersView(){
@@ -77,6 +97,21 @@ export class AdminComponent implements OnInit {
 		this.show_m_e_v = false;
 		this.show_m_u_v = true;
 		this.show_o_e_v = false;
+		//send post request to get all events
+		$.get('http://localhost:3000/getAllUser', (data, status) => {
+			console.log(status, data);
+			//add all data to local list
+			for(let i = 0; i < data.length; i++){
+				let newE: any = {};
+				newE.eid = data[i].eid;
+				newE.name = data[i].name;
+				newE.datetime = data[i].datetime;
+				newE.quota = data[i].quota;
+				newE.location = data[i].location;
+				newE.type = data[i].type;
+				this.eventsList.push(newE);
+			}
+		});
 	}
 
 	showObtainEventsView(){
@@ -93,10 +128,9 @@ export class AdminComponent implements OnInit {
 		console.log('reload data from online dataset');
 
 		//send get request
-		$.get('localhost:3000/flushData', (data, status) => console.log(status));
+		$.get('http://localhost:3000/flushData', (data, status) => console.log(status));
 	}
 
-	eventsList:Array<any> = [];
 	pushEvent(event: any){
 		console.log('add event', event);
 		let newE: any = {};
@@ -105,8 +139,14 @@ export class AdminComponent implements OnInit {
 		newE.quota = event.target.parentElement.parentElement.children[2].children[0].value;
 		newE.location = event.target.parentElement.parentElement.children[3].children[0].value;
 		newE.type = event.target.parentElement.parentElement.children[4].children[0].value;
-		this.eventsList.push(newE);
-		console.log(newE);
+		// send new event
+		$.post('http://localhost:3000/addEvent', {
+			name: newE.name,
+			datetime: newE.datetime,
+			quota: newE.quota,
+			location: newE.location,
+			type: newE.type
+		}, (data, status) => console.log(data));
 	}
 
 	pushEventFromScript(name: string, datetime: string, quota: string, location: string, type: string){
@@ -128,27 +168,47 @@ export class AdminComponent implements OnInit {
 		this.eventsList[i].quota = event.target.parentElement.parentElement.children[2].children[0].children[0].value;
 		this.eventsList[i].location = event.target.parentElement.parentElement.children[3].children[0].children[0].value;
 		this.eventsList[i].type = event.target.parentElement.parentElement.children[4].children[0].children[0].value;
+
+		//update
+		$.post('http://localhost:3000/editEvent/' + this.eventsList[i].eid, {
+			name: this.eventsList[i].name,
+			datetime: this.eventsList[i].datetime,
+			quota: this.eventsList[i].quota,
+			location: this.eventsList[i].location,
+			type: this.eventsList[i].type
+		}, (data, status) => console.log(data));
 	}
 
 	deleteEvent(i: any){
 		console.log('delete event', i);
-		this.eventsList.splice(i, 1);
+		//delete
+		$.get('http://localhost:3000/removeEvent/' + this.eventsList[i].eid, (data, status) => this.eventsList.splice(i, 1));
 	}
 
-	usersList: Array<any> = [];
 	pushUser(event: any){
 		console.log('add user', event);
 		let newE: any = {}
 		newE.name = event.target.parentElement.parentElement.children[0].children[0].value;
-		newE.password = event.target.parentElement.parentElement.children[1].children[0].value;
-		this.usersList.push(newE);
+		newE.password = sha256(event.target.parentElement.parentElement.children[1].children[0].value);
+
+		//add user request
+		$.post('http://localhost:3000/addUser', {
+			name: newE.name,
+			password: newE.password
+		}, (data, status) => this.usersList.push(newE));
+
 		console.log(newE);
 	}
 
 	updateUser(event: any, i: any){
 		console.log('update user', i);
 		this.usersList[i].name = event.target.parentElement.parentElement.children[0].children[0].children[0].value;
-		this.usersList[i].password = event.target.parentElement.parentElement.children[1].children[0].children[0].value;
+		this.usersList[i].password = sha256(event.target.parentElement.parentElement.children[1].children[0].children[0].value);
+
+		$.post('http://localhost:3000/editUser', {
+			name: this.usersList[i].name,
+			password: this.usersList[i].password
+		}, (data, status) => console.log(data));
 	}
 
 	deleteUser(i: any){

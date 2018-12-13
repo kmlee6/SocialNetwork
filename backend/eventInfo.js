@@ -48,6 +48,7 @@ router.get('/flushData', function(req, res){
 router.post('/addEvent', function(req, res){
 	Event.find({}, 'eid -_id -__v').sort({eid : -1}).limit(1)
 		.then(function(latestID){
+			console.log(req.body)
 			maxIndex = 0
 			if (latestID.length != 0){
 				maxIndex = latestID[0].eid + 1
@@ -56,7 +57,7 @@ router.post('/addEvent', function(req, res){
 									eid: maxIndex,
 									name: req.body['name'],
 									type: req.body['type'],
-									datetime: req.body['datetime'],
+									datetime: req.Ebody['datetime'],
 									location: req.body['location'],
 									quota: req.body['quota']
 								})
