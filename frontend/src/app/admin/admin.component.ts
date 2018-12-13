@@ -149,7 +149,7 @@ export class AdminComponent implements OnInit {
 			quota: newE.quota,
 			location: newE.location,
 			type: newE.type
-		}, (data, status) => this.eventsList.push(newE));
+		}, (data, status) => this.showManageEventsView());
 	}
 
 	pushEventFromScript(name: string, datetime: string, quota: string, location: string, type: string){
