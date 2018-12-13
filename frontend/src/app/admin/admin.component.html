@@ -3,16 +3,16 @@
 		<li class="nav-item">
 			<img width="40" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
 		</li>
-		<li class="nav-item" (click)="showFlushDataView()" (mouseover)="hover0=true" (mouseleave)="hover0=false">
+		<li class="nav-item" (click)="navigate(1)" (mouseover)="hover0=true" (mouseleave)="hover0=false">
 			<div class="nav-link" [style.color]="hover0?'green':'white'">Flush Data</div>
 		</li>
-		<li class="nav-item" (click)="showManageEventsView()" (mouseover)="hover1=true" (mouseleave)="hover1=false">
+		<li class="nav-item" (click)="navigate(2)" (mouseover)="hover1=true" (mouseleave)="hover1=false">
 			<div class="nav-link" [style.color]="hover1?'green':'white'">Manage Events</div>
 		</li>
-		<li class="nav-item" (click)="showManageUsersView()" (mouseover)="hover2=true" (mouseleave)="hover2=false">
+		<li class="nav-item" (click)="navigate(3)" (mouseover)="hover2=true" (mouseleave)="hover2=false">
 			<div class="nav-link" [style.color]="hover2?'green':'white'">Manage Users</div>
 		</li>
-		<li class="nav-item" (click)="showObtainEventsView()" (mouseover)="hover4=true" (mouseleave)="hover4=false">
+		<li class="nav-item" (click)="navigate(4)" (mouseover)="hover4=true" (mouseleave)="hover4=false">
 			<div class="nav-link" [style.color]="hover4?'green':'white'">Obtain Events</div>
 		</li>
 		<li class="nav-item" [style.display]="loginFlag?'unset':'none'" (click)="logout()" (mouseover)="hover5=true" (mouseleave)="hover5=false">

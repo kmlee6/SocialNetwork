@@ -49,13 +49,18 @@ export class AdminComponent implements OnInit {
 	show_m_u_v: boolean = false;
 	show_o_e_v: boolean = false;
 
+	navigate(page: any){
+		this.router.navigate(['admin/' + page]);
+	}
+
 	logout(){
 		console.log('logout');
+		this.router.navigate(['home/0']);
 	}
 
 	showFlushDataView(){
 		console.log('show flush data view');
-		this.router.navigate(['admin/1']);
+		// this.router.navigate(['admin/1']);
 		this.first = false;
 		this.show_f_d_v = true;
 		this.show_m_e_v = false;
@@ -66,7 +71,7 @@ export class AdminComponent implements OnInit {
 	showManageEventsView(){
 		this.eventsList = [];
 		console.log('show manage events view');
-		this.router.navigate(['admin/2']);
+		// this.router.navigate(['admin/2']);
 		this.first = false;
 		this.show_f_d_v = false;
 		this.show_m_e_v = true;
@@ -93,7 +98,7 @@ export class AdminComponent implements OnInit {
 	showManageUsersView(){
 		this.usersList = [];
 		console.log('show manage users view');
-		this.router.navigate(['admin/3']);
+		// this.router.navigate(['admin/3']);
 		this.first = false;
 		this.show_f_d_v = false;
 		this.show_m_e_v = false;
@@ -114,7 +119,7 @@ export class AdminComponent implements OnInit {
 
 	showObtainEventsView(){
 		console.log('show obtain events view');
-		this.router.navigate(['admin/4']);
+		// this.router.navigate(['admin/4']);
 		this.first = false;
 		this.show_f_d_v = false;
 		this.show_m_e_v = false;
@@ -193,7 +198,13 @@ export class AdminComponent implements OnInit {
 		$.post('http://localhost:3000/addUser', {
 			name: newE.name,
 			password: newE.password
-		}, (data, status) => this.usersList.push(newE));
+		}, (data, status) => {
+			if(data == '88'){
+				alert('Add User Failed.');
+			}else{
+				this.showManageUsersView();
+			}
+		});
 
 		console.log(newE);
 	}

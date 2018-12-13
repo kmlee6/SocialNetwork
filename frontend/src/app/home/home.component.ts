@@ -61,6 +61,10 @@ export class HomeComponent implements OnInit {
 
 	keyword: string = '';
 
+	navigate(page: any){
+		this.router.navigate(['home/' + page]);
+	}
+
 	login(username: string, userpassword: string){
 		let loginOk: boolean = false;
 
@@ -100,12 +104,13 @@ export class HomeComponent implements OnInit {
 	}
 
 	showEventsList(){
+		this.eventsList = [];
 		console.log(this.cookieService.get('login'));
 		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
 		}
 		if(this.loginFlag){
-			this.router.navigate(['home/1']);
+			// this.router.navigate(['home/1']);
 			console.log('show events');
 			this.first = false;
 			this.show_e = true;
@@ -138,7 +143,7 @@ export class HomeComponent implements OnInit {
 			this.loginFlag = true;
 		}
 		if(this.loginFlag){
-			this.router.navigate(['home/2']);
+			// this.router.navigate(['home/2']);
 			console.log('search events');
 			this.first = false;
 			this.show_e = false;
@@ -156,13 +161,28 @@ export class HomeComponent implements OnInit {
 			this.loginFlag = true;
 		}
 		if(this.loginFlag){
-			this.router.navigate(['home/3']);
+			this.favouriteEventsList = [];
+			// this.router.navigate(['home/3']);
 			console.log('show favourite');
 			this.first = false;
 			this.show_e = false;
 			this.search_e = false;
 			this.show_f = true;
 			this.show_e_d = false;
+			$.get('http://localhost:3000/getBookMark/' + this.userid, (data, status) => {
+				console.log(status, data);
+				//add all data to local list
+				for(let i = 0; i < data.length; i++){
+					let newE: any = {};
+					newE.eid = data[i].eid;
+					newE.name = data[i].name;
+					newE.datetime = data[i].datetime;
+					newE.quota = data[i].quota;
+					newE.location = data[i].location;
+					newE.type = data[i].type;
+					this.favouriteEventsList.push(newE);
+				}
+			});
 		}else{
 			window.alert('Please Login!');
 			this.router.navigate(['home/0']);
@@ -260,7 +280,14 @@ export class HomeComponent implements OnInit {
 
 	addEventToFavourite(event: any){
 		console.log(event)
-		this.favouriteEventsList.push(event);
+		//send add fav request
+		$.post('http://localhost:3000/addBookMark', {
+			uid: this.userid,
+			bookmark: event.eid
+		}, (data, status) => {
+			console.log(data);
+			this.favouriteEventsList.push(event);
+		});
 	}
 
 	inputKeyword(event: any){
@@ -293,6 +320,7 @@ export class HomeComponent implements OnInit {
 	focusedEvent: any = {};
 	focusedEventComments: any = [];
 	showEventDetail(event: any){
+		this.focusedEventComments = [];
 		console.log('show event detail');
 		this.first = false;
 		this.show_e = false;
@@ -305,6 +333,13 @@ export class HomeComponent implements OnInit {
 		$.get('http://localhost:3000/getComment/' + this.focusedEvent.eid, (data, status) => {
 			console.log(data);
 			//list comment
+			for(let i = 0; i < data.length; i++){
+				let c: any = {};
+				c.username = data[i].username;
+				c.datetime = data[i].time;
+				c.content = data[i].comment;
+				this.focusedEventComments.push(c);
+			}
 		});
 	}
 
@@ -315,9 +350,11 @@ export class HomeComponent implements OnInit {
 		$.post('http://localhost:3000/saveComment', {
 			eid: this.focusedEvent.eid,
 			uid: this.userid,
+			username: this.username,
 			comment: content
 		}, (data, status) => {
 			console.log(data);
+			this.showEventDetail(this.focusedEvent);
 		});
 	}
 }
