@@ -6,6 +6,9 @@ import { ThrowStmt } from '@angular/compiler';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HomeRouting } from './home.module';
+import * as $ from 'jquery';
+import sha256 from 'js-sha256';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +17,13 @@ import { HomeRouting } from './home.module';
 })
 export class HomeComponent implements OnInit {
 
-	constructor(private route: ActivatedRoute, private router: Router) { }
+	constructor(private route: ActivatedRoute, private router: Router, private cookieService: CookieService) { }
 
 	path: any;
 	sub: any;
+
+	eventsList: Array<any> = [];
+	favouriteEventsList: Array<any> = [];
 
 	first: boolean = true;
 	show_e: boolean = false;
@@ -47,6 +53,7 @@ export class HomeComponent implements OnInit {
 	loginFlag: boolean = false;
 
 	username:string = '';
+	userid:string = '';
 
 	searchField: string = 'Program Name';
 
@@ -55,12 +62,16 @@ export class HomeComponent implements OnInit {
 	login(username: string, password: string){
 		let loginOk: boolean = true;
 		console.log(username + password);
+
+		//check login
+
 		if(loginOk){
 			// set login ok to cookie
-			this.loginFlag = true;
+			this.cookieService.set('login', 'yes');
 			this.username = username;
 			this.first = false;
 			this.show_e = true;
+			this.router.navigate(['home/1']);
 		}
 	}
 
@@ -73,9 +84,14 @@ export class HomeComponent implements OnInit {
 		this.show_f = false;
 		this.show_e_d = false;
 		console.log('logout');
+		this.cookieService.delete('login');
 	}
 
 	showEventsList(){
+		console.log(this.cookieService.get('login'));
+		if(this.cookieService.get('login') == 'yes'){
+			this.loginFlag = true;
+		}
 		if(this.loginFlag){
 			this.router.navigate(['home/1']);
 			console.log('show events');
@@ -84,6 +100,21 @@ export class HomeComponent implements OnInit {
 			this.search_e = false;
 			this.show_f = false;
 			this.show_e_d = false;
+			//send post request to get all events
+			$.get('http://localhost:3000/getAllEvent', (data, status) => {
+				console.log(status, data);
+				//add all data to local list
+				for(let i = 0; i < data.length; i++){
+					let newE: any = {};
+					newE.eid = data[i].eid;
+					newE.name = data[i].name;
+					newE.datetime = data[i].datetime;
+					newE.quota = data[i].quota;
+					newE.location = data[i].location;
+					newE.type = data[i].type;
+					this.eventsList.push(newE);
+				}
+			});
 		}else{
 			window.alert('Please Login!');
 			this.router.navigate(['home/0']);
@@ -91,6 +122,9 @@ export class HomeComponent implements OnInit {
 	}
 
 	searchEvents(){
+		if(this.cookieService.get('login') == 'yes'){
+			this.loginFlag = true;
+		}
 		if(this.loginFlag){
 			this.router.navigate(['home/2']);
 			console.log('search events');
@@ -106,6 +140,9 @@ export class HomeComponent implements OnInit {
 	}
 
 	showFavourite(){
+		if(this.cookieService.get('login') == 'yes'){
+			this.loginFlag = true;
+		}
 		if(this.loginFlag){
 			this.router.navigate(['home/3']);
 			console.log('show favourite');
@@ -119,10 +156,6 @@ export class HomeComponent implements OnInit {
 			this.router.navigate(['home/0']);
 		}
 	}
-
-	// data structures for showing all events
-	eventsList: Array<any> = [];
-	favouriteEventsList: Array<any> = [];
 
 	pushEventToShow(name: string, datetime: string, quota: string, location: string, type: string){
 		let newE: any = {}

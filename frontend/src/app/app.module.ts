@@ -9,6 +9,7 @@ import { AboutComponent } from './about/about.component';
 import { NavComponent } from './nav/nav.component';
 import { AdminComponent } from './admin/admin.component';
 import { RouterModule, Routes } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 const appRoutes: Routes = [
 	{ path: 'admin/:view', component: AdminComponent },
@@ -32,7 +33,7 @@ const appRoutes: Routes = [
 		AppRoutingModule,
 		FormsModule
 	],
-	providers: [],
+	providers: [ CookieService ],
 	bootstrap: [AppComponent]
 })
 export class AppModule { 
