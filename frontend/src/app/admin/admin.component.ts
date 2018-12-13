@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AdminRouting } from './admin.module';
 import * as $ from 'jquery';
-import sha256 from 'js-sha256';
+import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
 	selector: 'app-admin',
@@ -192,7 +192,7 @@ export class AdminComponent implements OnInit {
 		console.log('add user', event);
 		let newE: any = {}
 		newE.name = event.target.parentElement.parentElement.children[0].children[0].value;
-		newE.password = sha256(event.target.parentElement.parentElement.children[1].children[0].value);
+		newE.password = Md5.hashStr(event.target.parentElement.parentElement.children[1].children[0].value);
 
 		//add user request
 		$.post('http://localhost:3000/addUser', {
@@ -212,7 +212,7 @@ export class AdminComponent implements OnInit {
 	updateUser(event: any, i: any){
 		console.log('update user', i);
 		this.usersList[i].name = event.target.parentElement.parentElement.children[0].children[0].children[0].value;
-		this.usersList[i].password = sha256(event.target.parentElement.parentElement.children[1].children[0].children[0].value);
+		this.usersList[i].password = Md5.hashStr(event.target.parentElement.parentElement.children[1].children[0].children[0].value);
 
 		$.post('http://localhost:3000/editUser/' + this.usersList[i].uid, {
 			name: this.usersList[i].name,

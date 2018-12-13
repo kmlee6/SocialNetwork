@@ -7,8 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HomeRouting } from './home.module';
 import * as $ from 'jquery';
-import sha256 from 'js-sha256';
+// import { sha256 } from 'js-sha256';
 import { CookieService } from 'ngx-cookie-service';
+import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
   selector: 'app-home',
@@ -71,7 +72,7 @@ export class HomeComponent implements OnInit {
 		//check login
 		$.post('http://localhost:3000/login', {
 			name: username,
-			password: sha256(userpassword)
+			password: Md5.hashStr(userpassword)
 		}, (data, status) => {
 			console.log(data);
 			if(data.login == true){
