@@ -9,6 +9,7 @@ import { HomeRouting } from './home.module';
 import * as $ from 'jquery';
 // import { sha256 } from 'js-sha256';
 import { CookieService } from 'ngx-cookie-service';
+import { Cookies } from 'js-cookie';
 import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
@@ -43,7 +44,7 @@ export class HomeComponent implements OnInit {
 			console.log(this.path);
 			switch(this.path['view']){
 				case '0':
-					if(this.cookieService.check('login')){
+					if(this.cookieService.get('login') != ''){
 						this.navigate(1);
 					}
 				break;
@@ -106,14 +107,17 @@ export class HomeComponent implements OnInit {
 		this.show_f = false;
 		this.show_e_d = false;
 		console.log('logout');
-		this.cookieService.delete('login');
+		this.navigate(0);
+		this.cookieService.set('login', '');
 	}
 
 	showEventsList(){
+		this.loginFlag = false;
 		this.eventsList = [];
 		console.log(this.cookieService.get('login'));
 		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
+			console.log(this.cookieService.get('login') != '');
 		}
 		if(this.loginFlag){
 			// this.router.navigate(['home/1']);
@@ -145,6 +149,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	searchEvents(){
+		this.loginFlag = false;
 		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
 		}
@@ -163,6 +168,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	showFavourite(){
+		this.loginFlag = false;
 		if(this.cookieService.get('login') != ''){
 			this.loginFlag = true;
 		}

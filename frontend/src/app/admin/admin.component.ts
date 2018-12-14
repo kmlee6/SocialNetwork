@@ -143,13 +143,22 @@ export class AdminComponent implements OnInit {
 		newE.location = event.target.parentElement.parentElement.children[3].children[0].value;
 		newE.type = event.target.parentElement.parentElement.children[4].children[0].value;
 		// send new event
-		$.post('http://localhost:3000/addEvent', {
-			name: newE.name,
-			datetime: newE.datetime,
-			quota: newE.quota,
-			location: newE.location,
-			type: newE.type
-		}, (data, status) => this.showManageEventsView());
+		if(newE.name == '' ||
+			newE.datetime == '' ||
+			newE.quota == '' ||
+			newE.location == '' ||
+			newE.type == '' 
+		){
+			window.alert('Please fill all attributes!');
+		}else{
+			$.post('http://localhost:3000/addEvent', {
+				name: newE.name,
+				datetime: newE.datetime,
+				quota: newE.quota,
+				location: newE.location,
+				type: newE.type
+			}, (data, status) => this.showManageEventsView());
+		}
 	}
 
 	pushEventFromScript(name: string, datetime: string, quota: string, location: string, type: string){
@@ -166,20 +175,30 @@ export class AdminComponent implements OnInit {
 
 	updateEvent(event: any, i:any){
 		console.log('update event', i);
-		this.eventsList[i].name = event.target.parentElement.parentElement.children[0].children[0].children[0].value;
-		this.eventsList[i].datetime = event.target.parentElement.parentElement.children[1].children[0].children[0].value;
-		this.eventsList[i].quota = event.target.parentElement.parentElement.children[2].children[0].children[0].value;
-		this.eventsList[i].location = event.target.parentElement.parentElement.children[3].children[0].children[0].value;
-		this.eventsList[i].type = event.target.parentElement.parentElement.children[4].children[0].children[0].value;
+	
+		if(event.target.parentElement.parentElement.children[0].children[0].children[0].value == '' ||
+			event.target.parentElement.parentElement.children[1].children[0].children[0].value == '' ||
+			event.target.parentElement.parentElement.children[2].children[0].children[0].value == '' ||
+			event.target.parentElement.parentElement.children[3].children[0].children[0].value == '' ||
+			event.target.parentElement.parentElement.children[4].children[0].children[0].value == '' 
+		){
+			window.alert('Please fill all attributes!');
+		}else{
+			this.eventsList[i].name = event.target.parentElement.parentElement.children[0].children[0].children[0].value;
+			this.eventsList[i].datetime = event.target.parentElement.parentElement.children[1].children[0].children[0].value;
+			this.eventsList[i].quota = event.target.parentElement.parentElement.children[2].children[0].children[0].value;
+			this.eventsList[i].location = event.target.parentElement.parentElement.children[3].children[0].children[0].value;
+			this.eventsList[i].type = event.target.parentElement.parentElement.children[4].children[0].children[0].value;
 
-		//update
-		$.post('http://localhost:3000/editEvent/' + this.eventsList[i].eid, {
-			name: this.eventsList[i].name,
-			datetime: this.eventsList[i].datetime,
-			quota: this.eventsList[i].quota,
-			location: this.eventsList[i].location,
-			type: this.eventsList[i].type
-		}, (data, status) => console.log(data));
+			//update
+			$.post('http://localhost:3000/editEvent/' + this.eventsList[i].eid, {
+				name: this.eventsList[i].name,
+				datetime: this.eventsList[i].datetime,
+				quota: this.eventsList[i].quota,
+				location: this.eventsList[i].location,
+				type: this.eventsList[i].type
+			}, (data, status) => console.log(data));
+		}
 	}
 
 	deleteEvent(i: any){
@@ -194,19 +213,25 @@ export class AdminComponent implements OnInit {
 		newE.name = event.target.parentElement.parentElement.children[0].children[0].value;
 		newE.password = Md5.hashStr(event.target.parentElement.parentElement.children[1].children[0].value);
 
-		//add user request
-		$.post('http://localhost:3000/addUser', {
-			name: newE.name,
-			password: newE.password
-		}, (data, status) => {
-			if(data == '88'){
-				alert('Add User Failed.');
-			}else{
-				this.showManageUsersView();
-			}
-		});
+		let unhashed: any = event.target.parentElement.parentElement.children[1].children[0].value;
+		console.log(newE.name.length, unhashed.length);
+		if(newE.name.length >=4 && unhashed.length >=4 && newE.name.length <=20 && unhashed.length <=20){
+			//add user request
+			$.post('http://localhost:3000/addUser', {
+				name: newE.name,
+				password: newE.password
+			}, (data, status) => {
+				if(data == '88'){
+					alert('Add User Failed.');
+				}else{
+					this.showManageUsersView();
+				}
+			});
 
-		console.log(newE);
+			console.log(newE);
+		}else{
+			window.alert("Username and password length must be >=4 and <= 20!");
+		}
 	}
 
 	updateUser(event: any, i: any){
@@ -214,10 +239,16 @@ export class AdminComponent implements OnInit {
 		this.usersList[i].name = event.target.parentElement.parentElement.children[0].children[0].children[0].value;
 		this.usersList[i].password = Md5.hashStr(event.target.parentElement.parentElement.children[1].children[0].children[0].value);
 
-		$.post('http://localhost:3000/editUser/' + this.usersList[i].uid, {
-			name: this.usersList[i].name,
-			password: this.usersList[i].password
-		}, (data, status) => console.log(data));
+		let unhashed = event.target.parentElement.parentElement.children[1].children[0].children[0].value;
+
+		if(this.usersList[i].name.length >=4 && unhashed.length >=4 && this.usersList[i].name.length <=20 && unhashed.length <=20){
+			$.post('http://localhost:3000/editUser/' + this.usersList[i].uid, {
+				name: this.usersList[i].name,
+				password: this.usersList[i].password
+			}, (data, status) => console.log(data));
+		}else{
+			window.alert("Username and password length must be >=4 and <= 20!");
+		}
 	}
 
 	deleteUser(i: any){
