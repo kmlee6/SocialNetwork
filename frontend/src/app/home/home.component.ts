@@ -250,9 +250,9 @@ export class HomeComponent implements OnInit {
 			case 'quota':
 				console.log('sort by quota');
 				if(this.quotaClickCount % 2 == 0){
-					this.eventsList.sort((a,b) => (a.quota > b.quota) ? 1 : ((b.quota > a.quota) ? -1 : 0));
+					this.eventsList.sort((a,b) => (parseInt(a.quota) > parseInt(b.quota)) ? 1 : ((parseInt(b.quota) > parseInt(a.quota)) ? -1 : 0));
 				}else{
-					this.eventsList.sort((a,b) => (a.quota > b.quota) ? -1 : ((b.quota > a.quota) ? 1 : 0));
+					this.eventsList.sort((a,b) => (parseInt(a.quota) > parseInt(b.quota)) ? -1 : ((parseInt(b.quota) > parseInt(a.quota)) ? 1 : 0));
 				}
 				this.quotaClickCount++;
 			break;
