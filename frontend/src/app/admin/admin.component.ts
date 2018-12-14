@@ -26,7 +26,8 @@ export class AdminComponent implements OnInit {
 			console.log(this.path);
 			switch(this.path['view']){
 				case '1':
-					this.showFlushDataView();
+					this.showAbout();
+					// this.showManageEventsView();
 				break;
 				case '2':
 					this.showManageEventsView();
@@ -58,8 +59,8 @@ export class AdminComponent implements OnInit {
 		this.router.navigate(['home/0']);
 	}
 
-	showFlushDataView(){
-		console.log('show flush data view');
+	showAbout(){
+		console.log('show about');
 		// this.router.navigate(['admin/1']);
 		this.first = false;
 		this.show_f_d_v = true;
@@ -129,7 +130,7 @@ export class AdminComponent implements OnInit {
 
 	reloadData(){
 		console.log('reload data from online dataset');
-
+		window.alert('Reload data from online dataset!');
 		//send get request
 		$.get('http://localhost:3000/flushData', (data, status) => console.log(status));
 	}

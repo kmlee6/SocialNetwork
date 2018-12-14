@@ -9,7 +9,7 @@ import { HomeRouting } from './home.module';
 import * as $ from 'jquery';
 // import { sha256 } from 'js-sha256';
 import { CookieService } from 'ngx-cookie-service';
-import { Cookies } from 'js-cookie';
+// import { Cookies } from 'js-cookie';
 import {Md5} from 'ts-md5/dist/md5';
 
 @Component({

@@ -1,21 +1,21 @@
 <nav class="navbar flex-column navbar-dark bg-dark text-white sticky-top">
 	<ul class="nav nav-pills nav-fill">
-		<li class="nav-item">
-			<img width="40" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+		<li style="cursor: pointer" class="nav-item" (mouseover)="hover6=true" (mouseleave)="hover6=false">
+			<div class="nav-link" [style.color]="hover6?'green':'white'" (click)='reloadData()'>Flush Data</div>
 		</li>
-		<li class="nav-item" (click)="navigate(1)" (mouseover)="hover0=true" (mouseleave)="hover0=false">
-			<div class="nav-link" [style.color]="hover0?'green':'white'">Flush Data</div>
+		<li style="cursor: pointer" class="nav-item" (click)="navigate(1)" (mouseover)="hover0=true" (mouseleave)="hover0=false">
+			<div class="nav-link" [style.color]="hover0?'green':'white'">About</div>
 		</li>
-		<li class="nav-item" (click)="navigate(2)" (mouseover)="hover1=true" (mouseleave)="hover1=false">
+		<li style="cursor: pointer" class="nav-item" (click)="navigate(2)" (mouseover)="hover1=true" (mouseleave)="hover1=false">
 			<div class="nav-link" [style.color]="hover1?'green':'white'">Manage Events</div>
 		</li>
-		<li class="nav-item" (click)="navigate(3)" (mouseover)="hover2=true" (mouseleave)="hover2=false">
+		<li style="cursor: pointer" class="nav-item" (click)="navigate(3)" (mouseover)="hover2=true" (mouseleave)="hover2=false">
 			<div class="nav-link" [style.color]="hover2?'green':'white'">Manage Users</div>
 		</li>
-		<li class="nav-item" (click)="navigate(4)" (mouseover)="hover4=true" (mouseleave)="hover4=false">
+		<li style="cursor: pointer" class="nav-item" (click)="navigate(4)" (mouseover)="hover4=true" (mouseleave)="hover4=false">
 			<div class="nav-link" [style.color]="hover4?'green':'white'">Obtain Events</div>
 		</li>
-		<li class="nav-item" [style.display]="loginFlag?'unset':'none'" (click)="logout()" (mouseover)="hover5=true" (mouseleave)="hover5=false">
+		<li style="cursor: pointer" class="nav-item" [style.display]="loginFlag?'unset':'none'" (click)="logout()" (mouseover)="hover5=true" (mouseleave)="hover5=false">
 			<div class="nav-link" [style.color]="hover5?'green':'white'">Logout</div>
 		</li>
 		<li class="nav-item bg-light" [style.display]="loginFlag?'unset':'none'"><div class="nav-link font-weight-bold" style="color: rgb(75, 207, 58) ">Admin</div></li>
@@ -27,12 +27,98 @@
 </div>
 
 <div [style.display]="show_f_d_v?'unset':'none'">
-	show flush data view
-	<button (click)='reloadData()'>reload</button>
+<div style="padding: 0 20% 0 20%;">
+	About
+	<div>Workload<br>
+		<ul>
+			<li>Frontend</li>
+				<ul>
+					<li>User: </li>
+					<li>Admin: KONG Sai Kwan</li>
+				</ul>
+			<li>Backend</li>
+				<ul>
+					<li>LEE Ka Man </li>
+				</ul>
+		</ul>
+	</div>
+
+	<div>
+		<p>For User Action:</p>
+			<table>
+				<tr>
+					<th style="width: 100px; text-align: center;">Sorting</th>
+					<td >Once the user click on the header of the field, it will sort the table with the clicked list ascendingly. Then, if the user click again, it will sort in descending. If the user would like to unsort the list, he can click on the header again to return the original order of the table.</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">Searching</th>
+					<td>The user enters the keywords, chooses which field is searched and presses the “Search!” button. The result table will be shown as the same layout of the table listed all events.</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">Displaying details and Comment</th>
+					<td>Users can click anywhere on the row of a single event in order to display the details of the event, see other comment and comment it. The comment table will clearly show the username of who commented, the date when he commented and the content of the comment.  Without reloading, the comment will automatically post on the comment table automatically after pressing “Post!”</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">Add events into a list of favorite events</th>
+					<td>There is a button “+” as one of the column of each event. User can press the button “+” in order to add events into the list of favorite events. </td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">Username and Logout</th>
+					<td>The username is always shown on the top right of the screen once the user has logged in. Also there is a “Logout” button for user to press to log out.</td>
+				</tr>
+			</table>
+	</div>
+
+	<div>
+		<p>For admin action: the admin mode can be accessed via “localhost:4200/admin/0”.</p>
+		<table >
+				<tr>
+					<th style="width: 100px; text-align: center;">Flush data</th>
+					<td >the admin can reload data from the online dataset by pressing “reload” button.</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">CRUD event data</th>
+					<td>
+						<ul>
+							<li>Create: There is a creating event bar on the “Manage Events”. Admin need to input all required information of the event and press “Create”   button to insert the new record to the database.</li>
+							<li>Update: The details of the event will be shown when the cursor is on the program name of the event. Admin can change any field of the event and data in local database and displaying will be changed after pressing “Save”.</li>
+							<li>Delete: There is a button “X” as one of the column of each event. Admin can press the button “X” in order to delete the event.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">CRUD user data</th>
+					<td>
+						<ul>
+							<li>Create: Similarly, there is a create user bar on the “Manage Users”. Admin need to input the username and password, and press “Create”   button to insert the new record to the database.
+							</li>
+							<li>Update: Similar to the event data. The details of the event will be shown when the cursor is on the username of the user.
+							</li>
+							<li>Delete: Similar to the event data. Besides, after deleting a user, the comment replied by the user will be deleted both on the page and in the database, and the user’s favorite list will not be shown.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">Obtain event data from CSV</th>
+					<td>Admin can choose which CSV file to upload by pressing “Choose file”. There is simple instructions below to show the data format. 
+					</td>
+				</tr>
+				<tr>
+					<th style="width: 100px; text-align: center;">Logout</th>
+					<td>There is a “Logout” button for admin to press to log out.</td>
+				</tr>
+			</table>
+			<p>For storing data: Pre-processing have been done on the given data because there is some &#123; &#125; and non-ASCII character are included in the primary data. Therefore, before parsing by JSON, we have to remove those from the original data in the beginning. </p>
+	</div>
+	<div>
+		<p>Design of data schemas and models of the database: There is three schemas.<br>First, account schemas. In the account schemas, it consists of uid, name, password and bookmark. The uid is the user id, which is a unique number and it assigned to each user automatically. The name is the username that is unique. The bookmark is an array of user’s favorite events.<br>Second, event schemas. In the event schemas, it consists of eid, name, type, datetime, location and quota. The eid is the event id, which is a unique number and it assigned to each event automatically.<br>Third, comment schemas. In the comment schemas, it consists of cid, uid, eid, time and comment. The cid is the comment id, which is a unique number and it assigned to each user automatically. The comment is stored in a string.</p>
+		<p style="color: green; font-size: 20px; font-weight: bold;">We have read the article carefully.</p>
+	</div>
+</div>
 </div>
 
 <div [style.display]="show_m_e_v?'unset':'none'">
-	<table class="table table-striped table-bordered table-dark table-responsive-sm">
+	<table class="table table-striped table-bordered table-dark table-responsive-sm" style="margin-bottom: 137px">
 		<thead>
 			<tr>
 				<th>ID</th>
@@ -104,7 +190,7 @@
 				</tr>
 			</tbody>
 	</table>
-	<table class="table table-striped table-bordered table-light table-responsive-sm fixed-bottom">
+	<table class="table table-striped table-bordered table-light table-responsive-sm fixed-bottom" style="margin-bottom: 0;">
 		<thead>
 			<tr>
 				<th>Program Name</th>
@@ -141,7 +227,7 @@
 </div>
 
 <div [style.display]="show_m_u_v?'unset':'none'">
-	<table class="table table-striped table-bordered table-dark table-responsive-sm">
+	<table class="table table-striped table-bordered table-dark table-responsive-sm" style="margin-bottom: 137px">
 		<thead>
 			<tr>
 				<th>ID</th>
@@ -185,7 +271,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<table class="table table-striped table-bordered table-dark table-responsive-sm fixed-bottom">
+	<table class="table table-striped table-bordered table-dark table-responsive-sm fixed-bottom" style="margin-bottom: 0;">
 		<thead>
 			<tr>
 				<th>Username</th>
@@ -210,7 +296,10 @@
 </div>
 
 <div [style.display]="show_o_e_v?'unset':'none'">
-	<input type='file' (input)="selectedFile($event)">
+	<div class="upload-btn-wrapper">
+		<button class="btn">Upload a file</button>
+		<input type="file" name="myfile" />
+	</div>
 	<p>
 		File format:
 	</p>
