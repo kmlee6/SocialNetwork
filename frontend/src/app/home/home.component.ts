@@ -42,6 +42,11 @@ export class HomeComponent implements OnInit {
 			this.path = params; // (+) converts string 'id' to a number
 			console.log(this.path);
 			switch(this.path['view']){
+				case '0':
+					if(this.cookieService.check('login')){
+						this.navigate(1);
+					}
+				break;
 				case '1':
 					this.showEventsList();
 				break;
