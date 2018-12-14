@@ -39,7 +39,9 @@ router.post('/editUser/:uid', function(req, res){
 
 	Account.findOneAndUpdate({uid: req.params.uid}, {$set: changes}).then(function(data, err){
 		if(err) res.send(err)
-		res.send("done!")
+		res.send(true)
+	}).catch(function(err){
+		res.send(false)
 	})
 })
 

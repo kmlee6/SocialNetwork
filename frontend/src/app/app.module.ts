@@ -14,6 +14,7 @@ import { CookieService } from 'ngx-cookie-service';
 const appRoutes: Routes = [
 	{ path: 'admin/:view', component: AdminComponent },
 	{ path: 'home/:view', component: HomeComponent },
+	{ path: 'about', component: AboutComponent},
 	{ path: '**', redirectTo: 'home/0' }
   ];
 

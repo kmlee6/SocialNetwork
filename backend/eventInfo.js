@@ -19,7 +19,7 @@ router.get('/flushData', function(req, res){
 		newEvent = []
 		var count = 0
 		for(var key in data){
-			if(count == 10) break
+			if(count == 100) break
 			count += 1
 			var instance = data[key]
 			var nextRecord = {}
